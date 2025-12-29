@@ -11,8 +11,7 @@ client = OpenAI(
 )
 
 embedding_model = GoogleGenerativeAIEmbeddings(
-    model="models/gemini-embedding-001",  # Replace with the appropriate Gemini embedding model
-    api_key="AIzaSyBoiP2Ml12YTZRd4dmpjYvPn0UKkqSKDQw"
+    model="models/gemini-embedding-001"
 )
 
 vector_db = QdrantVectorStore.from_existing_collection(
