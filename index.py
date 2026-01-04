@@ -7,7 +7,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 load_dotenv()
 
-pdf_path = Path(__file__).parent / "Employment.pdf"
+pdf_path = Path(__file__).parent / "data" / "sample.pdf"
 
 # load the file
 

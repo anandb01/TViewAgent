@@ -1,3 +1,4 @@
+import os
 from dotenv import load_dotenv
 from fastapi import Query
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -5,6 +6,9 @@ from langchain_qdrant import QdrantVectorStore
 from openai import OpenAI
 
 load_dotenv()
+
+
+QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 
 client = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
@@ -16,8 +20,8 @@ embedding_model = GoogleGenerativeAIEmbeddings(
 
 vector_db = QdrantVectorStore.from_existing_collection(
     embedding=embedding_model,
-    url="http://localhost:6333",
-    collection_name = "pdf_rag"
+    url=QDRANT_URL,
+    collection_name="pdf_rag",
 )
 
 def process_query(qry: str):
