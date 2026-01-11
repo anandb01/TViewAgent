@@ -21,14 +21,15 @@ embedding_model = GoogleGenerativeAIEmbeddings(
 vector_db = QdrantVectorStore.from_existing_collection(
     embedding=embedding_model,
     url=QDRANT_URL,
-    collection_name="pdf_rag",
+    collection_name="confluence_rag"
 )
 
 def process_query(qry: str):
     print(f"💬: {qry}")
     search_results = vector_db.similarity_search(query=qry)
 
-    context = "\n\n\n".join([f"Page Content: {result.page_content}\nPage Number: {result.metadata['page_label']}\nFile Location: {result.metadata['source']}" for result in search_results])
+    # context = "\n\n\n".join([f"Page Content: {result.page_content}\nPage Number: {result.metadata['page_label']}\nFile Location: {result.metadata['source']}" for result in search_results])
+    context = "\n\n\n".join([f"Page Content: {result.page_content}\nFile Location: {result.metadata['source']}" for result in search_results])
 
     SYSTEM_PROMPT = f"""
         You are a helpful AI assistant who answers user query based on the available context retreived from a PDF file along with page_contents and page number.
