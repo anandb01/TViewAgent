@@ -4,6 +4,7 @@ from fastapi import Query
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from openai import OpenAI
+from langchain_community.vectorstores import FAISS
 
 load_dotenv()
 
@@ -18,11 +19,13 @@ embedding_model = GoogleGenerativeAIEmbeddings(
     model="models/gemini-embedding-001"
 )
 
-vector_db = QdrantVectorStore.from_existing_collection(
-    embedding=embedding_model,
-    url=QDRANT_URL,
-    collection_name="confluence_rag"
-)
+# vector_db = QdrantVectorStore.from_existing_collection(
+#     embedding=embedding_model,
+#     url=QDRANT_URL,
+#     collection_name="confluence_rag"
+# )
+
+vector_db = FAISS.load_local("faiss_index", embedding_model, allow_dangerous_deserialization=True)
 
 def process_query(qry: str):
     print(f"💬: {qry}")

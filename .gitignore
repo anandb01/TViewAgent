@@ -8,6 +8,8 @@ dist/
 *.egg-info/
 *.egg
 
+faiss_index/
+
 htmlcov/
 .tox/
 .nox/

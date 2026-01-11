@@ -4,6 +4,7 @@ from langchain_community.document_loaders import ConfluenceLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_qdrant import QdrantVectorStore
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.vectorstores import FAISS 
 
 load_dotenv()
 
@@ -76,21 +77,23 @@ embedding_model = GoogleGenerativeAIEmbeddings(
 print(f"\n💾 Storing vectors in Qdrant (collection: {COLLECTION_NAME})...")
 
 try:
-    vector_store = QdrantVectorStore.from_documents(
-        documents=chunks,
-        embedding=embedding_model,
-        url=QDRANT_URL,
-        collection_name=COLLECTION_NAME,
-        prefer_grpc=False,  # Use HTTP instead of gRPC (more compatible)
-    )
+    # vector_store = QdrantVectorStore.from_documents(
+    #     documents=chunks,
+    #     embedding=embedding_model,
+    #     url=QDRANT_URL,
+    #     collection_name=COLLECTION_NAME,
+    #     prefer_grpc=False,  # Use HTTP instead of gRPC (more compatible)
+    # )
     
-    print(f"✅ Successfully indexed {len(chunks)} chunks into Qdrant!")
-    print(f"✅ Collection: {COLLECTION_NAME}")
-    print(f"✅ Qdrant URL: {QDRANT_URL}")
+    # print(f"✅ Successfully indexed {len(chunks)} chunks into Qdrant!")
+    # print(f"✅ Collection: {COLLECTION_NAME}")
+    # print(f"✅ Qdrant URL: {QDRANT_URL}")
+
+    vector_store = FAISS.from_documents(chunks, embedding_model)
+    vector_store.save_local("faiss_index")
     
 except Exception as e:
-    print(f"❌ Error storing in Qdrant: {e}")
-    print(f"\nMake sure Qdrant is running on {QDRANT_URL}")
+    print(f"❌ Error storing in FAISS: {e}")
     exit(1)
 
 print("\n🎉 Indexing of Confluence documentation done!")
